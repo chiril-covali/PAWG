@@ -1,1 +1,164 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucrare de laborator 1</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
 
+        .task {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .semi-circle {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        input {
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 15px;
+            padding: 10px;
+            border-left: 4px solid #007bff;
+            background-color: #f8f9fa;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .author {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lucrare de laborator</h1>
+    <div class="author">
+        Author: chiril-covali<br>
+        Date: 2025-02-04
+    </div>
+
+    <div class="task">
+        <h2>Sarcina 1: Semidisc</h2>
+        <div class="semi-circle">
+            <svg width="300" height="150">
+                <path d="M 0 100 A 100 100 0 0 1 200 100 L 0 100 Z" 
+                      fill="#007bff" />
+            </svg>
+        </div>
+    </div>
+
+    <div class="task">
+        <h2>Sarcina 2: Calculul razei și ariei discului</h2>
+        <div class="input-group">
+            <label for="circumference">Introduceți lungimea cercului:</label><br>
+            <input type="number" 
+                   id="circumference" 
+                   placeholder="Lungimea cercului" 
+                   min="0" 
+                   step="0.01">
+            <button onclick="calculate()">Calculează</button>
+        </div>
+        <div id="result"></div>
+        
+        <!-- Adăugăm vizualizarea cercului -->
+        <div class="circle-visualization">
+            <svg width="300" height="300" id="circleDisplay">
+                <!-- Cercul va fi desenat aici -->
+                <circle cx="150" cy="150" r="0" 
+                        fill="#007bff" 
+                        stroke="#0056b3" 
+                        stroke-width="2"/>
+                <!-- Linia razei -->
+                <line x1="150" y1="150" x2="150" y2="150" 
+                      stroke="#FF4444" 
+                      stroke-width="2"/>
+                <!-- Text pentru rază -->
+                <text x="160" y="145" fill="#333" id="radiusText"></text>
+            </svg>
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            const circumference = parseFloat(document.getElementById('circumference').value);
+            
+            if (isNaN(circumference) || circumference <= 0) {
+                document.getElementById('result').innerHTML = 
+                    'Vă rugăm să introduceți o valoare pozitivă validă!';
+                return;
+            }
+
+            const radius = circumference / (2 * Math.PI);
+            const area = Math.PI * radius * radius;
+
+            document.getElementById('result').innerHTML = `
+                <strong>Rezultate:</strong><br>
+                Raza cercului: ${radius.toFixed(2)} unități<br>
+                Aria discului: ${area.toFixed(2)} unități pătrate
+            `;
+
+            // Actualizăm vizualizarea SVG
+            updateCircleVisualization(radius);
+        }
+
+        function updateCircleVisualization(radius) {
+            // Scalăm raza pentru a se potrivi în SVG (maxim 140 pentru vizibilitate bună)
+            const scale = 140 / Math.max(radius, 1);
+            const scaledRadius = radius * scale;
+
+            const circle = document.querySelector('#circleDisplay circle');
+            const radiusLine = document.querySelector('#circleDisplay line');
+            const radiusText = document.querySelector('#circleDisplay text');
+
+            // Actualizăm cercul
+            circle.setAttribute('r', scaledRadius);
+
+            // Actualizăm linia razei
+            radiusLine.setAttribute('x2', (150 + scaledRadius).toString());
+
+            // Actualizăm textul razei
+            radiusText.setAttribute('x', (150 + scaledRadius/2).toString());
+            radiusText.textContent = `R = ${radius.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
