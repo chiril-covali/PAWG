@@ -86,21 +86,21 @@
         // Funcție pentru a lista fișierele
         async function listFiles() {
             try {
-                const response = await fetch('/');
+                const response = await fetch(window.location.href);
                 const text = await response.text();
-                
+
                 // Creăm un DOM parser pentru a analiza răspunsul
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(text, 'text/html');
-                
+
                 // Găsim toate link-urile
                 const links = Array.from(doc.querySelectorAll('a'));
-                
+
                 // Filtrăm și sortăm link-urile
                 const files = links
                     .map(link => link.href)
                     .filter(href => !href.endsWith('/'))
-                    .map(href => href.split('/').pop())
+                    .map(href => decodeURIComponent(href.split('/').pop()))
                     .sort();
 
                 // Cream HTML pentru fiecare fișier
