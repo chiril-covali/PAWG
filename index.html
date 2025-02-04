@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index Fișiere</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -98,9 +99,8 @@
 
                 // Filtrăm și sortăm link-urile
                 const files = links
-                    .map(link => link.href)
-                    .filter(href => !href.endsWith('/'))
-                    .map(href => decodeURIComponent(href.split('/').pop()))
+                    .map(link => link.getAttribute('href'))
+                    .filter(href => href && !href.endsWith('/'))
                     .sort();
 
                 // Cream HTML pentru fiecare fișier
