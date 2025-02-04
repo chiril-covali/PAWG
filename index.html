@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index Laboratoare</title>
+    <title>PAWG Laboratoare Index</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -102,25 +102,34 @@
             border-radius: 6px;
             margin: 10px 0;
         }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #586069;
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Index Laboratoare</h1>
+        <h1>PAWG Laboratoare</h1>
         <div class="github-info">
-            <p>Repository: chiril-covali/laboratoare</p>
-            <p>Last updated: <span id="lastUpdate">2025-02-04 09:00:44</span></p>
+            <p>Repository: <a href="https://github.com/chiril-covali/PAWG" style="color: #58a6ff;">chiril-covali/PAWG</a></p>
+            <p>Last updated: <span id="lastUpdate">2025-02-04 09:03:57</span></p>
             <p>Author: chiril-covali</p>
         </div>
     </header>
 
     <main class="lab-container">
         <div id="labList">
-            <!-- Laboratoarele vor fi populate aici prin JavaScript -->
+            <div class="loading">Se încarcă laboratoarele...</div>
         </div>
     </main>
 
     <script>
+        const REPO_OWNER = 'chiril-covali';
+        const REPO_NAME = 'PAWG';
+
         // Funcție pentru a obține icoanele fișierelor în funcție de extensie
         function getFileIcon(filename) {
             const extension = filename.split('.').pop().toLowerCase();
@@ -132,20 +141,28 @@
                 'jpg': '🖼️',
                 'png': '🖼️',
                 'pdf': '📕',
+                'txt': '📝',
                 'default': '📄'
             };
             return icons[extension] || icons.default;
         }
 
-        // Funcție pentru a formata data
-        function formatDate(date) {
-            return new Date(date).toLocaleString();
+        // Funcție pentru formatarea datei
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString('ro-RO', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
         }
 
         // Funcție pentru a scana și afișa structura laboratoarelor
         async function scanAndDisplayLabs() {
             try {
-                const response = await fetch('https://api.github.com/repos/chiril-covali/laboratoare/contents/');
+                const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/`);
                 const data = await response.json();
                 
                 const labListElement = document.getElementById('labList');
@@ -154,7 +171,12 @@
                 // Filtrăm și sortăm directoarele care încep cu "lab"
                 const labs = data
                     .filter(item => item.type === 'dir' && item.name.toLowerCase().startsWith('lab'))
-                    .sort((a, b) => a.name.localeCompare(b.name));
+                    .sort((a, b) => {
+                        // Extrage numărul din numele laboratorului pentru sortare numerică
+                        const numA = parseInt(a.name.replace(/[^0-9]/g, ''));
+                        const numB = parseInt(b.name.replace(/[^0-9]/g, ''));
+                        return numA - numB;
+                    });
 
                 for (const lab of labs) {
                     const labContent = await fetch(lab.url);
@@ -162,9 +184,12 @@
 
                     labsHtml += `
                         <li class="lab-item">
-                            <div class="lab-title">${lab.name}</div>
+                            <div class="lab-title">${lab.name.toUpperCase()}</div>
                             <ul class="file-list">
                     `;
+
+                    // Sortăm fișierele alfabetic
+                    files.sort((a, b) => a.name.localeCompare(b.name));
 
                     for (const file of files) {
                         labsHtml += `
@@ -194,6 +219,7 @@
                         Error: ${error.message}
                     </div>
                 `;
+                console.error('Eroare la încărcarea laboratoarelor:', error);
             }
         }
 
