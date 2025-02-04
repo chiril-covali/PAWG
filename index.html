@@ -3,134 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PAWG Laboratoare Index</title>
+    <title>Index Fișiere</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            max-width: 1200px;
-            margin: 0 auto;
+            max-width: 800px;
+            margin: 20px auto;
             padding: 20px;
             background-color: #f5f5f5;
         }
 
-        header {
-            background-color: #24292e;
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-        }
-
-        .github-info {
-            font-size: 0.9em;
-            color: #8b949e;
-            margin-top: 10px;
-        }
-
-        .lab-container {
+        .container {
             background-color: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .lab-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .lab-item {
+        h1 {
+            color: #24292e;
             margin-bottom: 20px;
-            padding: 15px;
-            background-color: #f6f8fa;
-            border: 1px solid #e1e4e8;
-            border-radius: 6px;
-            transition: transform 0.2s;
-        }
-
-        .lab-item:hover {
-            transform: translateX(5px);
-            background-color: #f1f8ff;
-        }
-
-        .lab-title {
-            font-size: 1.2em;
-            color: #0366d6;
-            margin-bottom: 10px;
         }
 
         .file-list {
             list-style: none;
-            padding-left: 20px;
+            padding: 0;
         }
 
         .file-item {
-            margin: 5px 0;
-            display: flex;
-            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f6f8fa;
+            border: 1px solid #e1e4e8;
+            border-radius: 4px;
+            transition: transform 0.2s;
+        }
+
+        .file-item:hover {
+            transform: translateX(5px);
+            background-color: #f1f8ff;
         }
 
         .file-link {
-            color: #24292e;
+            color: #0366d6;
             text-decoration: none;
             display: flex;
             align-items: center;
-            padding: 5px 10px;
-            border-radius: 4px;
-        }
-
-        .file-link:hover {
-            background-color: #0366d61a;
         }
 
         .file-icon {
-            margin-right: 8px;
-            width: 16px;
-            height: 16px;
-        }
-
-        .update-time {
-            font-size: 0.8em;
-            color: #586069;
-        }
-
-        .error-message {
-            color: #cb2431;
-            padding: 10px;
-            background-color: #ffeef0;
-            border-radius: 6px;
-            margin: 10px 0;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #586069;
+            margin-right: 10px;
+            font-size: 1.2em;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>PAWG Laboratoare</h1>
-        <div class="github-info">
-            <p>Repository: <a href="https://github.com/chiril-covali/PAWG" style="color: #58a6ff;">chiril-covali/PAWG</a></p>
-            <p>Last updated: <span id="lastUpdate">2025-02-04 09:03:57</span></p>
-            <p>Author: chiril-covali</p>
-        </div>
-    </header>
-
-    <main class="lab-container">
-        <div id="labList">
-            <div class="loading">Se încarcă laboratoarele...</div>
-        </div>
-    </main>
+    <div class="container">
+        <h1>Index Fișiere</h1>
+        <ul class="file-list" id="fileList">
+            <!-- Fișierele vor fi listate aici -->
+        </ul>
+    </div>
 
     <script>
-        const REPO_OWNER = 'chiril-covali';
-        const REPO_NAME = 'PAWG';
-
-        // Funcție pentru a obține icoanele fișierelor în funcție de extensie
+        // Funcție pentru a obține icoanele fișierelor
         function getFileIcon(filename) {
             const extension = filename.split('.').pop().toLowerCase();
             const icons = {
@@ -147,84 +83,53 @@
             return icons[extension] || icons.default;
         }
 
-        // Funcție pentru formatarea datei
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleString('ro-RO', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        }
-
-        // Funcție pentru a scana și afișa structura laboratoarelor
-        async function scanAndDisplayLabs() {
+        // Funcție pentru a lista fișierele
+        async function listFiles() {
             try {
-                const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/`);
-                const data = await response.json();
+                const response = await fetch('/');
+                const text = await response.text();
                 
-                const labListElement = document.getElementById('labList');
-                let labsHtml = '<ul class="lab-list">';
+                // Creăm un DOM parser pentru a analiza răspunsul
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, 'text/html');
+                
+                // Găsim toate link-urile
+                const links = Array.from(doc.querySelectorAll('a'));
+                
+                // Filtrăm și sortăm link-urile
+                const files = links
+                    .map(link => link.href)
+                    .filter(href => !href.endsWith('/'))
+                    .map(href => href.split('/').pop())
+                    .sort();
 
-                // Filtrăm și sortăm directoarele care încep cu "lab"
-                const labs = data
-                    .filter(item => item.type === 'dir' && item.name.toLowerCase().startsWith('lab'))
-                    .sort((a, b) => {
-                        // Extrage numărul din numele laboratorului pentru sortare numerică
-                        const numA = parseInt(a.name.replace(/[^0-9]/g, ''));
-                        const numB = parseInt(b.name.replace(/[^0-9]/g, ''));
-                        return numA - numB;
-                    });
-
-                for (const lab of labs) {
-                    const labContent = await fetch(lab.url);
-                    const files = await labContent.json();
-
-                    labsHtml += `
-                        <li class="lab-item">
-                            <div class="lab-title">${lab.name.toUpperCase()}</div>
-                            <ul class="file-list">
-                    `;
-
-                    // Sortăm fișierele alfabetic
-                    files.sort((a, b) => a.name.localeCompare(b.name));
-
-                    for (const file of files) {
-                        labsHtml += `
-                            <li class="file-item">
-                                <a href="${file.html_url}" class="file-link" target="_blank">
-                                    <span class="file-icon">${getFileIcon(file.name)}</span>
-                                    ${file.name}
-                                </a>
-                            </li>
-                        `;
-                    }
-
-                    labsHtml += `
-                            </ul>
+                // Cream HTML pentru fiecare fișier
+                const fileListHTML = files
+                    .map(file => `
+                        <li class="file-item">
+                            <a href="${file}" class="file-link">
+                                <span class="file-icon">${getFileIcon(file)}</span>
+                                ${file}
+                            </a>
                         </li>
-                    `;
-                }
+                    `)
+                    .join('');
 
-                labsHtml += '</ul>';
-                labListElement.innerHTML = labsHtml;
+                // Actualizăm lista de fișiere
+                document.getElementById('fileList').innerHTML = fileListHTML;
 
             } catch (error) {
-                document.getElementById('labList').innerHTML = `
-                    <div class="error-message">
-                        Nu s-au putut încărca laboratoarele. 
-                        Verificați conexiunea la GitHub și permisiunile repository-ului.
-                        Error: ${error.message}
-                    </div>
+                console.error('Eroare la listarea fișierelor:', error);
+                document.getElementById('fileList').innerHTML = `
+                    <li style="color: red; padding: 10px;">
+                        Eroare la încărcarea fișierelor: ${error.message}
+                    </li>
                 `;
-                console.error('Eroare la încărcarea laboratoarelor:', error);
             }
         }
 
-        // Inițializăm scanarea la încărcarea paginii
-        document.addEventListener('DOMContentLoaded', scanAndDisplayLabs);
+        // Încărcăm fișierele când pagina se încarcă
+        document.addEventListener('DOMContentLoaded', listFiles);
     </script>
 </body>
 </html>
