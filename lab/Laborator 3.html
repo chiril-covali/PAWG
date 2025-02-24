@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <title>Laborator 3</title>
+  <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .task {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .semi-circle {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        input {
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 15px;
+            padding: 10px;
+            border-left: 4px solid #007bff;
+            background-color: #f8f9fa;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .author {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+  </style>
+  <script>
+    function checkConsecutiveNumbers() {
+      let found = false;
+      let nFound = 0;
+      let sum1 = 0, sum2 = 0;
+      // căutăm soluția pentru n între 1 și 500
+      for (let n = 1; n <= 500; n++) {
+        let a = n, b = n + 1, c = n + 2, d = n + 3;
+        let e = n + 4, f = n + 5, g = n + 6;
+        let s1 = a * a + b * b + c * c + d * d;
+        let s2 = e * e + f * f + g * g;
+        if (s1 === s2) {
+          found = true;
+          nFound = n;
+          sum1 = s1;
+          sum2 = s2;
+          break;
+        }
+      }
+
+      if (found) {
+        let set1 = `${nFound} · ${nFound+1} · ${nFound+2} · ${nFound+3}`;
+        let set2 = `${nFound+4} · ${nFound+5} · ${nFound+6}`;
+        document.getElementById('result').innerHTML =
+          "Numerele găsite: " + set1 + " <br>" +
+          "Suma pătratelor celor 4 numere este: " + sum1 + "<br><br>" +
+          "Suma pătratelor următoarelor 3 numere (" + set2 + ") este: " + sum2;
+      } else {
+        document.getElementById('result').innerHTML =
+          "Nu există astfel de numere în intervalul căutat.";
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="task">
+    <h1>Verifică condiția</h1>
+    <p>
+      Se determină dacă există patru numere naturale consecutive, astfel încât suma pătratelor lor este egală cu suma pătratelor următoarelor trei.
+    </p>
+    <div class="input-group">
+      <button onclick="checkConsecutiveNumbers()">Verifică</button>
+    </div>
+    <p id="result"></p>
+  </div>
+</body>
+</html>
