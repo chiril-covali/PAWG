@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <title>Laborator 2</title>
+  <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .task {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .semi-circle {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        input {
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 15px;
+            padding: 10px;
+            border-left: 4px solid #007bff;
+            background-color: #f8f9fa;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .author {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+  </style>
+  <script>
+    function computeLastDigit() {
+      const input = document.getElementById('nInput').value;
+      const n = parseInt(input, 10);
+      if (isNaN(n) || n < 1) {
+        alert('Vă rugăm să introduceți un număr natural valid.');
+        return;
+      }
+      
+      // Calculăm factorialul folosind BigInt
+      let product = 1n;
+      for (let i = 2; i <= n; i++) {
+        product *= BigInt(i);
+      }
+      
+      const lastDigit = (product % 10n).toString();
+      
+      // Construim șirul de afișare: "1 · 2 · 3 · ... · n"
+      let expression = "";
+      for (let i = 1; i <= n; i++) {
+        expression += i;
+        if (i < n) {
+          expression += " · ";
+        }
+      }
+      
+      // Afișăm expresia urmată de rezultatul complet al produsului și apoi doar ultima cifră
+      document.getElementById('result').innerHTML =
+        expression + " = " + product.toString() +
+        "<br><br>Ultima cifră a produsului este: " + lastDigit;
+    }
+  </script>
+</head>
+<body>
+  <div class="task">
+    <h1>Calculează ultima cifră a produsului 1·2·3·...·n</h1>
+    <div class="input-group">
+      <input type="number" id="nInput" placeholder="Introduceți un număr natural (maxim 1000)">
+      <button onclick="computeLastDigit()">Calculează</button>
+    </div>
+    <p id="result"></p>
+  </div>
+</body>
+</html>
