@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <title>Laborator 4</title>
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .array-display {
+      margin: 15px 0;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    .sort-buttons {
+      display: flex;
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    #numberInput {
+      width: 200px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Laborator 4</h1>
+
+    <div class="task">
+      <h2>Sarcina 6</h2>
+      <p>Se dă un vector cu n (1 ≤ n ≤ 100) componente numere întregi. Să se ordoneze componentele vectorului în ordine:</p>
+      <ul>
+        <li>a) crescătoare;</li>
+        <li>b) descrescătoare.</li>
+      </ul>
+
+      <div class="input-group">
+        <input type="text" id="numberInput" placeholder="Introduceți numerele separate prin spațiu">
+        <button onclick="addNumbers()">Adăugă numere</button>
+      </div>
+
+      <div class="array-display" id="currentArray">
+        Array curent: []
+      </div>
+
+      <div class="sort-buttons">
+        <button onclick="sortArray('asc')">Sortare crescătoare</button>
+        <button onclick="sortArray('desc')">Sortare descrescătoare</button>
+      </div>
+
+      <div class="array-display" id="sortedArray">
+        Array sortat: []
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let numbers = [];
+
+    function addNumbers() {
+      const input = document.getElementById('numberInput').value;
+      const newNumbers = input.trim().split(/\s+/).map(num => parseInt(num)).filter(num => !isNaN(num));
+
+      if (newNumbers.length === 0) {
+        alert('Vă rugăm să introduceți numere valide!');
+        return;
+      }
+
+      if (newNumbers.length + numbers.length > 100) {
+        alert('Numărul total de elemente nu poate depăși 100!');
+        return;
+      }
+
+      numbers = [...numbers, ...newNumbers];
+      updateArrayDisplay();
+      document.getElementById('numberInput').value = '';
+    }
+
+    function sortArray(direction) {
+      if (numbers.length === 0) {
+        alert('Vă rugăm să introduceți numere înainte de sortare!');
+        return;
+      }
+
+      const sortedNumbers = [...numbers].sort((a, b) => {
+        return direction === 'asc' ? a - b : b - a;
+      });
+
+      document.getElementById('sortedArray').textContent = 
+        `Array sortat (${direction === 'asc' ? 'crescător' : 'descrescător'}): [${sortedNumbers.join(', ')}]`;
+    }
+
+    function updateArrayDisplay() {
+      document.getElementById('currentArray').textContent = 
+        `Array curent: [${numbers.join(', ')}]`;
+      document.getElementById('sortedArray').textContent = 'Array sortat: []';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <title>Laborator 6</title>
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .text-input {
+      width: 100%;
+      max-width: 400px;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .result {
+      margin: 15px 0;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    .task-section {
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Laborator 6</h1>
+
+    <div class="task task-section">
+      <h2>Sarcina 7</h2>
+      <p>Se dă un text. Să se verifice dacă textul este palindrom (egal cu „răsturnatul" său).</p>
+
+      <div class="input-group">
+        <input type="text" id="palindromeInput" class="text-input" placeholder="Introduceți textul pentru verificare">
+        <button onclick="checkPalindrome()">Verifică palindrom</button>
+      </div>
+
+      <div class="result" id="palindromeResult"></div>
+    </div>
+
+    <div class="task task-section">
+      <h2>Sarcina 21</h2>
+      <p>Se dă un text. Să se insereze litera „o" înaintea fiecărei litere „a" precedate de litera „n".</p>
+
+      <div class="input-group">
+        <input type="text" id="textInput" class="text-input" placeholder="Introduceți textul pentru modificare">
+        <button onclick="processText()">Procesează textul</button>
+      </div>
+
+      <div class="result" id="textResult"></div>
+    </div>
+  </div>
+
+  <script>
+    function checkPalindrome() {
+      const input = document.getElementById('palindromeInput').value;
+      const cleanText = input.toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
+      const reversed = cleanText.split('').reverse().join('');
+      const isPalindrome = cleanText === reversed;
+
+      document.getElementById('palindromeResult').textContent = 
+        `Textul ${isPalindrome ? 'este' : 'nu este'} palindrom.
+${input} ${isPalindrome ? '=' : '≠'} ${input.split('').reverse().join('')}`;
+    }
+
+    function processText() {
+      const input = document.getElementById('textInput').value;
+      const processed = input.replace(/na/g, 'noa');
+
+      document.getElementById('textResult').textContent = 
+        `Text original: ${input}
+Text procesat: ${processed}`;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <title>Laborator 5</title>
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .matrix-container {
+      margin: 20px 0;
+    }
+
+    .matrix-input {
+      display: inline-block;
+      width: 50px;
+      height: 30px;
+      margin: 2px;
+      text-align: center;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .size-input {
+      width: 60px;
+      margin-right: 10px;
+    }
+
+    .results {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    .result-item {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Laborator 5</h1>
+
+    <div class="task">
+      <h2>Sarcina 6</h2>
+      <p>Pentru fiecare coloană a matricei date A(m, n) ale cărei elemente sînt numere întregi,
+         să se calculeze suma si numărul de elemente negative.</p>
+
+      <div class="input-group">
+        <label>Dimensiunea matricei:</label><br>
+        <input type="number" id="rows" class="size-input" placeholder="m" min="1" value="3">
+        <input type="number" id="cols" class="size-input" placeholder="n" min="1" value="3">
+        <button onclick="generateMatrix()">Generează matrice</button>
+      </div>
+
+      <div id="matrixContainer" class="matrix-container"></div>
+      <button onclick="calculateResults()" style="margin-top: 10px;">Calculează</button>
+
+      <div id="results" class="results"></div>
+    </div>
+  </div>
+
+  <script>
+    function generateMatrix() {
+      const rows = parseInt(document.getElementById('rows').value);
+      const cols = parseInt(document.getElementById('cols').value);
+
+      if (isNaN(rows) || isNaN(cols) || rows < 1 || cols < 1) {
+        alert('Introduceți dimensiuni valide pentru matrice!');
+        return;
+      }
+
+      const container = document.getElementById('matrixContainer');
+      container.innerHTML = '';
+
+      for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+          const input = document.createElement('input');
+          input.type = 'number';
+          input.className = 'matrix-input';
+          input.dataset.row = i;
+          input.dataset.col = j;
+          container.appendChild(input);
+        }
+        container.appendChild(document.createElement('br'));
+      }
+
+      document.getElementById('results').innerHTML = '';
+    }
+
+    function calculateResults() {
+      const rows = parseInt(document.getElementById('rows').value);
+      const cols = parseInt(document.getElementById('cols').value);
+      const results = document.getElementById('results');
+      results.innerHTML = '';
+
+      // Verificăm dacă matricea a fost generată
+      if (!document.querySelector('.matrix-input')) {
+        alert('Generați mai întâi matricea!');
+        return;
+      }
+
+      // Pentru fiecare coloană
+      for (let j = 0; j < cols; j++) {
+        let sum = 0;
+        let negativeCount = 0;
+
+        // Parcurgem elementele coloanei
+        for (let i = 0; i < rows; i++) {
+          const input = document.querySelector(`[data-row="${i}"][data-col="${j}"]`);
+          const value = parseInt(input.value) || 0;
+
+          if (value < 0) {
+            negativeCount++;
+            sum += value;
+          }
+        }
+
+        // Afișăm rezultatele pentru coloana curentă
+        const resultItem = document.createElement('div');
+        resultItem.className = 'result-item';
+        resultItem.textContent = `Coloana ${j + 1}: Suma elementelor negative = ${sum}, Numărul de elemente negative = ${negativeCount}`;
+        results.appendChild(resultItem);
+      }
+    }
+
+    // Generăm matricea inițială la încărcarea paginii
+    window.onload = generateMatrix;
+  </script>
+</body>
+</html>
