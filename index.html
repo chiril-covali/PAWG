@@ -6,82 +6,7 @@
     <title>Laboratoare</title>
     <!-- Folosim favicon.ico -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <style>
-        /* Stilurile rămân neschimbate */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            color: #24292e;
-            margin-bottom: 20px;
-        }
-
-        .info {
-            color: #586069;
-            font-size: 0.9em;
-            margin-bottom: 20px;
-            padding: 10px;
-            background-color: #f6f8fa;
-            border-radius: 4px;
-        }
-
-        .file-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .file-item {
-            margin: 10px 0;
-            padding: 10px;
-            background-color: #f6f8fa;
-            border: 1px solid #e1e4e8;
-            border-radius: 4px;
-            transition: transform 0.2s;
-        }
-
-        .file-item:hover {
-            transform: translateX(5px);
-            background-color: #f1f8ff;
-        }
-
-        .file-link {
-            color: #0366d6;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-        }
-
-        .file-icon {
-            margin-right: 10px;
-            font-size: 1.2em;
-        }
-
-        .error-message {
-            color: #cb2431;
-            padding: 10px;
-            background-color: #ffeef0;
-            border-radius: 4px;
-            margin: 10px 0;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #586069;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
@@ -179,14 +104,17 @@
                         <p>Eroare la încărcarea fișierelor: ${error.message}</p>
                         <p>Vă rugăm să verificați:</p>
                         <ul>
-                            <li>Repository-ul este public</li>
-                            <li>Folderul 'lab' există în repository</li>
-                            <li>Aveți conexiune la internet</li>
+                            <li>Conexiunea la internet</li>
+                            <li>Disponibilitatea API-ului GitHub</li>
+                            <li>Existența repository-ului și a folderului lab</li>
                         </ul>
                     </div>
                 `;
             }
         }
 
-        document.addEventListener('DOMContentLoaded', listFiles);
+        // Încărcăm fișierele când se încarcă pagina
+        window.addEventListener('load', listFiles);
     </script>
+</body>
+</html>
