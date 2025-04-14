@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <title>Laborator 9</title>
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: inline-block;
+      width: 150px;
+      margin-right: 10px;
+    }
+
+    .form-group input {
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      width: 200px;
+    }
+
+    .vehicle-display {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      border-left: 4px solid #007bff;
+    }
+
+    .motorcycle-display {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      border-left: 4px solid #28a745;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Laborator 9</h1>
+
+    <div class="task">
+      <h2>Implementarea Claselor TVehicul și TMotocicleta</h2>
+      
+      <div id="vehicleForm">
+        <h3>Creare Vehicul</h3>
+        <div class="form-group">
+          <label for="firma">Firma:</label>
+          <input type="text" id="firma" required>
+        </div>
+        <div class="form-group">
+          <label for="numarRoti">Număr de roți:</label>
+          <input type="number" id="numarRoti" required min="1">
+        </div>
+        <div class="form-group">
+          <label for="tipCombustibil">Tip combustibil:</label>
+          <input type="text" id="tipCombustibil" required>
+        </div>
+        <div class="form-group">
+          <label for="vitezaMaxima">Viteza maximă (km/h):</label>
+          <input type="number" id="vitezaMaxima" required min="0">
+        </div>
+        <div class="form-group">
+          <label for="anFabricatie">An fabricație:</label>
+          <input type="number" id="anFabricatie" required min="1900">
+        </div>
+        <button onclick="createVehicle()">Creează Vehicul</button>
+      </div>
+
+      <div id="motorcycleForm">
+        <h3>Creare Motocicletă</h3>
+        <div class="form-group">
+          <label for="mFirma">Firma:</label>
+          <input type="text" id="mFirma" required>
+        </div>
+        <div class="form-group">
+          <label for="mNumarRoti">Număr de roți:</label>
+          <input type="number" id="mNumarRoti" required min="1">
+        </div>
+        <div class="form-group">
+          <label for="mTipCombustibil">Tip combustibil:</label>
+          <input type="text" id="mTipCombustibil" required>
+        </div>
+        <div class="form-group">
+          <label for="mVitezaMaxima">Viteza maximă (km/h):</label>
+          <input type="number" id="mVitezaMaxima" required min="0">
+        </div>
+        <div class="form-group">
+          <label for="mAnFabricatie">An fabricație:</label>
+          <input type="number" id="mAnFabricatie" required min="1900">
+        </div>
+        <div class="form-group">
+          <label for="capacitateMotor">Capacitate motor (cc):</label>
+          <input type="number" id="capacitateMotor" required min="0">
+        </div>
+        <div class="form-group">
+          <label for="marca">Marcă:</label>
+          <input type="text" id="marca" required>
+        </div>
+        <div class="form-group">
+          <label for="model">Model:</label>
+          <input type="text" id="model" required>
+        </div>
+        <div class="form-group">
+          <label for="culoare">Culoare:</label>
+          <input type="text" id="culoare" required>
+        </div>
+        <button onclick="createMotorcycle()">Creează Motocicletă</button>
+      </div>
+
+      <div id="vehicleDisplay"></div>
+      <div id="motorcycleDisplay"></div>
+    </div>
+  </div>
+
+  <script>
+    class TVehicul {
+      constructor(firma, numarRoti, tipCombustibil, vitezaMaxima, anFabricatie) {
+        this.firma = firma;
+        this.numarRoti = numarRoti;
+        this.tipCombustibil = tipCombustibil;
+        this.vitezaMaxima = vitezaMaxima;
+        this.anFabricatie = anFabricatie;
+      }
+
+      toString() {
+        return `
+          <div class="vehicle-display">
+            <h3>Vehicul</h3>
+            <p><strong>Firma:</strong> ${this.firma}</p>
+            <p><strong>Număr roți:</strong> ${this.numarRoti}</p>
+            <p><strong>Tip combustibil:</strong> ${this.tipCombustibil}</p>
+            <p><strong>Viteza maximă:</strong> ${this.vitezaMaxima} km/h</p>
+            <p><strong>An fabricație:</strong> ${this.anFabricatie}</p>
+          </div>
+        `;
+      }
+    }
+
+    class TMotocicleta extends TVehicul {
+      constructor(firma, numarRoti, tipCombustibil, vitezaMaxima, anFabricatie,
+                  capacitateMotor, marca, model, culoare) {
+        super(firma, numarRoti, tipCombustibil, vitezaMaxima, anFabricatie);
+        this.capacitateMotor = capacitateMotor;
+        this.marca = marca;
+        this.model = model;
+        this.culoare = culoare;
+      }
+
+      toString() {
+        return `
+          <div class="motorcycle-display">
+            <h3>Motocicletă</h3>
+            <p><strong>Firma:</strong> ${this.firma}</p>
+            <p><strong>Număr roți:</strong> ${this.numarRoti}</p>
+            <p><strong>Tip combustibil:</strong> ${this.tipCombustibil}</p>
+            <p><strong>Viteza maximă:</strong> ${this.vitezaMaxima} km/h</p>
+            <p><strong>An fabricație:</strong> ${this.anFabricatie}</p>
+            <p><strong>Capacitate motor:</strong> ${this.capacitateMotor} cc</p>
+            <p><strong>Marcă:</strong> ${this.marca}</p>
+            <p><strong>Model:</strong> ${this.model}</p>
+            <p><strong>Culoare:</strong> ${this.culoare}</p>
+          </div>
+        `;
+      }
+    }
+
+    function createVehicle() {
+      const firma = document.getElementById('firma').value;
+      const numarRoti = parseInt(document.getElementById('numarRoti').value);
+      const tipCombustibil = document.getElementById('tipCombustibil').value;
+      const vitezaMaxima = parseInt(document.getElementById('vitezaMaxima').value);
+      const anFabricatie = parseInt(document.getElementById('anFabricatie').value);
+
+      if (!firma || !numarRoti || !tipCombustibil || !vitezaMaxima || !anFabricatie) {
+        alert('Vă rugăm să completați toate câmpurile!');
+        return;
+      }
+
+      const vehicul = new TVehicul(firma, numarRoti, tipCombustibil, vitezaMaxima, anFabricatie);
+      document.getElementById('vehicleDisplay').innerHTML = vehicul.toString();
+    }
+
+    function createMotorcycle() {
+      const firma = document.getElementById('mFirma').value;
+      const numarRoti = parseInt(document.getElementById('mNumarRoti').value);
+      const tipCombustibil = document.getElementById('mTipCombustibil').value;
+      const vitezaMaxima = parseInt(document.getElementById('mVitezaMaxima').value);
+      const anFabricatie = parseInt(document.getElementById('mAnFabricatie').value);
+      const capacitateMotor = parseInt(document.getElementById('capacitateMotor').value);
+      const marca = document.getElementById('marca').value;
+      const model = document.getElementById('model').value;
+      const culoare = document.getElementById('culoare').value;
+
+      if (!firma || !numarRoti || !tipCombustibil || !vitezaMaxima || !anFabricatie ||
+          !capacitateMotor || !marca || !model || !culoare) {
+        alert('Vă rugăm să completați toate câmpurile!');
+        return;
+      }
+
+      const motocicleta = new TMotocicleta(firma, numarRoti, tipCombustibil, vitezaMaxima,
+                                          anFabricatie, capacitateMotor, marca, model, culoare);
+      document.getElementById('motorcycleDisplay').innerHTML = motocicleta.toString();
+    }
+  </script>
+</body>
+</html>

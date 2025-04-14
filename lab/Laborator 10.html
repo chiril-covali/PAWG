@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <title>Laborator 10</title>
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .controls {
+      margin: 20px 0;
+      display: flex;
+      gap: 10px;
+    }
+
+    .text-box-container {
+      margin: 20px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .text-box {
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      min-width: 200px;
+    }
+
+    .text-box:focus {
+      border-color: #007bff;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    }
+
+    button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Laborator 10</h1>
+
+    <div class="task">
+      <h2>Gestionarea Casetelor de Text</h2>
+      
+      <div class="controls">
+        <button onclick="createTextBox()">Creează-casetă</button>
+        <button onclick="selectNextTextBox()">Alege-caseta</button>
+        <button onclick="deleteSelectedTextBox()">Șterge-caseta</button>
+      </div>
+
+      <div id="textBoxContainer" class="text-box-container"></div>
+    </div>
+  </div>
+
+  <script>
+    let currentFocusIndex = -1;
+
+    function createTextBox() {
+      const container = document.getElementById('textBoxContainer');
+      const textBox = document.createElement('textarea');
+      textBox.className = 'text-box';
+      textBox.rows = 4;
+      textBox.placeholder = 'Introduceți text aici...';
+      
+      textBox.addEventListener('focus', () => {
+        currentFocusIndex = Array.from(container.children).indexOf(textBox);
+      });
+
+      container.appendChild(textBox);
+      textBox.focus();
+      currentFocusIndex = container.children.length - 1;
+    }
+
+    function selectNextTextBox() {
+      const container = document.getElementById('textBoxContainer');
+      const textBoxes = container.children;
+
+      if (textBoxes.length === 0) return;
+
+      currentFocusIndex = (currentFocusIndex + 1) % textBoxes.length;
+      textBoxes[currentFocusIndex].focus();
+    }
+
+    function deleteSelectedTextBox() {
+      const container = document.getElementById('textBoxContainer');
+      const textBoxes = container.children;
+
+      if (currentFocusIndex >= 0 && currentFocusIndex < textBoxes.length) {
+        container.removeChild(textBoxes[currentFocusIndex]);
+        currentFocusIndex = Math.min(currentFocusIndex, textBoxes.length - 2);
+        
+        if (currentFocusIndex >= 0 && container.children.length > 0) {
+          container.children[currentFocusIndex].focus();
+        }
+      }
+    }
+  </script>
+</body>
+</html>
